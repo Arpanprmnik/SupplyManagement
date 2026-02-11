@@ -1,0 +1,34 @@
+﻿@model SupplyChain.Models.Suppliers
+
+<h2>Seller Signup</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="mb-3">
+        <label>Company Name</label>
+        @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label>Contact Name</label>
+        @Html.TextBoxFor(m => m.ContactName, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label>Phone</label>
+        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+    </div>
+
+    <div class="mb-3">
+        <label>Password</label>
+        @Html.PasswordFor(m => m.PasswordHash, new { @class = "form-control" })
+    </div>
+
+    <button class="btn btn-success">Signup</button>
+}
+

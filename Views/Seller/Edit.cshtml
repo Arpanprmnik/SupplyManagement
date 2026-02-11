@@ -1,0 +1,26 @@
+﻿@model SupplyChain.Models.Products
+
+<h2>Edit Product</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="mb-3">
+        <label>Name</label>
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label>Price</label>
+        @Html.TextBoxFor(m => m.Price, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label>Description</label>
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+    </div>
+
+    <button class="btn btn-primary">Update</button>
+}
+

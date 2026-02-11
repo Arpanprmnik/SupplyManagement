@@ -1,0 +1,50 @@
+﻿@model IEnumerable<SupplyChain.Models.SellerDashboardViewModel>
+
+<h2>My Products</h2>
+
+<div class="mb-3">
+    <a href="/Seller/AddProduct" class="btn btn-primary">Add Product</a>
+    <a href="/Seller/Logout" class="btn btn-outline-danger float-end">Logout</a>
+</div>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>@p.Name</td>
+            <td>@p.Price</td>
+
+            <td>
+                @using (Html.BeginForm("UpdateInventory", "Seller", FormMethod.Post))
+                {
+                    @Html.Hidden("inventoryId", p.InventoryId)
+
+                    <input type="number"
+                           name="quantity"
+                           value="@p.Quantity"
+                           min="0"
+                           class="form-control"
+                           style="width:90px; display:inline;" />
+
+                    <button class="btn btn-sm btn-success ms-2">
+                        Save
+                    </button>
+                }
+            </td>
+
+            <td>
+                <a href="/Seller/Edit/@p.ProductId"
+                   class="btn btn-sm btn-warning">
+                    Edit Product
+                </a>
+            </td>
+        </tr>
+    }
+</table>

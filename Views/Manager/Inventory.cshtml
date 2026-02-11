@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SupplyChain.Models.ManagerInventoryViewModel>
+
+<h2>Inventory Overview</h2>
+
+<table class="table table-bordered table-striped" id="productsTable">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Warehouse</th>
+            <th>Available Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.WarehouseName</td>
+                <td>
+                    @if (item.Quantity <= 3)
+                    {
+                        <span class="badge bg-info fs-6  bg bg-warning">
+                            @item.Quantity
+                        </span>
+                        continue;
+                    }
+                    <span class="badge bg-info fs-6">
+                        @item.Quantity
+                    </span>
+                </td>
+            </tr>
+         }
+    </tbody>
+</table>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#productsTable').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true
+            });
+        });
+    </script>
+}

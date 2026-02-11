@@ -1,0 +1,12 @@
+﻿<h2>Confirm Order</h2>
+
+<form method="post">
+    <input type="hidden" name="productId" value="@ViewBag.ProductId" />
+
+    <label>Quantity</label><br />
+    <input type="number" name="quantity" value="1" min="1" />
+
+    <br /><br />
+
+    <button type="submit">Place Order</button>
+</form>

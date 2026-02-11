@@ -1,0 +1,24 @@
+﻿@model IEnumerable<SupplyChain.Models.Orders>
+
+<h2>My Orders</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Order Id</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Total</th>
+    </tr>
+
+    @foreach (var o in Model)
+    {
+        <tr>
+            <td>@o.Id</td>
+            <td>@o.OrderDate.ToString("dd-MMM-yyyy")</td>
+            <td>
+                <span class="label label-info">@o.Status</span>
+            </td>
+            <td>@o.TotalAmount</td>
+        </tr>
+    }
+</table>

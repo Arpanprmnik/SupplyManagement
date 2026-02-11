@@ -1,0 +1,74 @@
+﻿
+
+@{
+    ViewBag.Title = "Login / Register";
+}
+
+<h2>Login / Register</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div style="color:red">@ViewBag.Error</div>
+}
+
+
+<form id="loginForm">
+
+    <div>
+        <label>Email</label><br />
+        <input type="email" name="Email" required />
+    </div>
+
+    <br />
+
+    <div>
+        <label>Password</label><br />
+        <input type="password" name="Password" required />
+    </div>
+
+    <br />
+
+    <div>
+        <label>Full Name (required for new users)</label><br />
+        <input type="text" name="FullName" />
+    </div>
+
+    <br />
+
+    <div>
+        <label>Phone (required for new users)</label><br />
+        <input type="text" name="Phone" />
+    </div>
+
+    <br />
+
+    <button type="submit">Continue</button>
+
+</form>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+
+            $("#loginForm").submit(function (e) {
+
+                e.preventDefault();
+
+                $.ajax({
+                    url: '@Url.Action("Login", "Account")',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (res) {
+                        if (res.success) {
+                            window.location.href = res.redirectUrl;
+                        } else {
+                            alert(res.message);
+                        }
+                    }
+                });
+
+            });
+
+        });
+    </script>
+}

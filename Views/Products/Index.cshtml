@@ -1,0 +1,57 @@
+﻿@model IEnumerable<SupplyChain.Models.Products>
+
+<div class="d-flex justify-content-end mb-3">
+    <a href="/Account/Common" class="btn btn-outline-primary">
+        Login
+    </a>
+</div>
+<h3>Welcome to SupplyChain</h3>
+
+<table id="productsTable" class="display">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Ajax.ActionLink(
+                        item.Name,
+                        "Details",
+                        "Products",
+                        new { id = item.Id },
+                        new AjaxOptions
+                        {
+                            HttpMethod = "GET",
+                            UpdateTargetId = "productDetails",
+                            InsertionMode = InsertionMode.Replace
+                        })
+                </td>
+                <td>@item.Price</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div id="productDetails" style="margin-top:20px">
+    <h4>Click a product to view details</h4>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#productsTable').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true
+            });
+        });
+    </script>
+}
+
+

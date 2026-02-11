@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "Customer Dashboard";
+}
+
+<h2>Customer Dashboard</h2>
+
+<div class="d-flex justify-content-end mb-3">
+    <a href="/Account/Logout" class="btn btn-outline-danger">Logout</a>
+</div>
+
+<hr />
+
+<h3 >
+    Products
+</h3>
+<table class="table table-bordered"  id="productsTable">
+    <thead>
+        <tr>
+            <th >Name</th>
+            <th >Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<hr />
+
+<h3>My Orders</h3>
+<table class="table table-striped"  id="ordersTable">
+    <thead>
+        <tr>
+            <th>Order Id</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            console.log("Dashboard JS loaded");
+
+            $.ajax({
+                url: '/Customer/GetDashboardData',
+                type: 'GET',
+                success: function (res) {
+                    console.log(res);
+
+                    // PRODUCTS
+                    $('#productsTable').DataTable({
+                        data: res.products,
+                        destroy: true,
+                        columns: [
+                            { data: 'Name' },
+                            { data: 'Price' },
+                            {
+                                data: 'Id',
+                                render: function (id) {
+                                    return `<a href="/Order/Create?productId=${id}"
+                                    class="btn btn-sm btn-primary">
+                                    Order</a>`;
+                                }
+                            }
+                        ]
+                    });
+
+                    // ORDERS 
+                    $('#ordersTable').DataTable({
+                        data: res.orders,
+                        destroy: true,
+                        columns: [
+                            { data: 'Id' },
+                            {
+                                data: 'OrderDate',
+                                render: function (d) {
+                                    if (!d) return '';
+
+                                    // ASP.NET MVC JSON date: "/Date(1769073871310)/"
+                                    const match = /\/Date\((\d+)\)\//.exec(d);
+
+                                    if (match) {
+                                        const date = new Date(parseInt(match[1]));
+                                        return date.toLocaleDateString('en-GB');
+                                    }
+
+                                    // fallback (if ISO ever comes later)
+                                    return new Date(d).toLocaleDateString('en-GB');
+                                }
+                            },
+
+                            { data: 'Status' },
+                            { data: 'TotalAmount' }
+                        ]
+                    });
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        });
+
+    </script>
+}
+
+<style>
+    h3 {
+        /* display: flex; */
+        align-content: space-around;
+        text-align: center;
+        justify-content: space-between;
+    }
+    table {
+        text-align: center
+    }
+</style>

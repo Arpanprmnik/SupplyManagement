@@ -1,0 +1,20 @@
+﻿@model IEnumerable<SupplyChain.Models.SellerInventoryViewModel>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Product</th>
+        <th>Warehouse</th>
+        <th>Quantity</th>
+        <th>Update</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ProductName</td>
+            <td>@item.WarehouseName</td>
+            <td>@item.Quantity</td>
+            <td>...</td>
+        </tr>
+    }
+</table>

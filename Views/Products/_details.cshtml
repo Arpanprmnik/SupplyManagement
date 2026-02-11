@@ -1,0 +1,21 @@
+﻿@model SupplyChain.Models.Products
+
+<h3>@Model.Name</h3>
+
+<p><b>SKU:</b> @Model.SKU</p>
+<p><b>Price:</b> @Model.Price</p>
+<p><b>Description:</b> @Model.Description</p>
+
+<hr />
+
+<h4>Category</h4>
+<p>@Model.Categories.CategoryName</p>
+
+<h4>Supplier</h4>
+<p>@Model.Suppliers.CompanyName</p>
+<p>@Model.Suppliers.Phone</p>
+
+<form action="@Url.Action("Login","Account")" method="get">
+    <input type="hidden" name="productId" value="@Model.Id" />
+    <button type="submit">Order</button>
+</form>

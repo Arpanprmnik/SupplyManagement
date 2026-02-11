@@ -1,0 +1,53 @@
+﻿@model SupplyChain.Models.SellerProductViewModel
+
+<h2>Add Product</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="mb-3">
+        <label>Name</label>
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label>SKU</label>
+        @Html.TextBoxFor(m => m.SKU, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label>Price</label>
+        @Html.TextBoxFor(m => m.Price, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label>Description</label>
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label>Category</label>
+        @Html.DropDownListFor(
+            m => m.CategoryId,
+            new SelectList(Model.Categories, "Id", "CategoryName"),
+            "-- Select Category --",
+            new { @class = "form-control" }
+        )
+    </div>
+
+    <div class="mb-3">
+        <label>Warehouse</label>
+        @Html.DropDownListFor(
+            m => m.WarehouseId,
+            new SelectList(Model.Warehouses, "Id", "WarehouseName"),
+            "-- Select Warehouse --",
+            new { @class = "form-control" }
+        )
+    </div>
+
+    <div class="mb-3">
+        <label>Initial Quantity</label>
+        @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", type = "number" })
+    </div>
+
+    <button class="btn btn-success">Save</button>
+}

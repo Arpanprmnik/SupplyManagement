@@ -1,28 +1,107 @@
-﻿<div class="d-flex justify-content-center gap-4 mt-4">
+﻿<div class="role-wrapper">
 
-    <a href="/Account/Login" class="btn btn-outline-primary role-btn">
-        <i class="bi bi-person-circle me-2"></i>
-        Customer Login
-    </a>
+    <div class="role-card">
 
-    <a href="/Seller/Login" class="btn btn-outline-success role-btn">
-        <i class="bi bi-shop me-2"></i>
-        Seller Login
-    </a>
+        <h2 class="role-title">Welcome to SupplyChain</h2>
+        <p class="role-subtitle">Choose how you want to continue</p>
+
+        <div class="role-options">
+
+            <a href="/Account/Login" class="role-btn customer">
+                <i class="bi bi-person-circle "></i>
+                <span>Customer Login</span>
+            </a>
+
+            <a href="/Seller/Login" class="role-btn seller">
+                <i class="bi bi-shop "></i>
+                <span>Seller Login</span>
+            </a>
+
+        </div>
+
+    </div>
 
 </div>
 
 
 <style>
-    .role-btn {
-        transition: all 0.3s ease;
-        font-weight: 500;
-        padding: 12px 22px;
+    /* ===== BACKGROUND ===== */
+    body {
+        background: linear-gradient(135deg, #4e54c8, #8f94fb);
+        height: 100vh;
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
     }
 
-        .role-btn:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    /* CENTER CONTENT */
+    .role-wrapper {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* CARD */
+    .role-card {
+        background: white;
+        padding: 45px 60px;
+        border-radius: 18px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+
+    /* TITLE */
+    .role-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .role-subtitle {
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+    /* OPTIONS */
+    .role-options {
+        display: flex;
+        gap: 30px;
+    }
+
+    /* BUTTON BASE */
+    .role-btn {
+        width: 190px;
+        height: 140px;
+        border-radius: 15px;
+        text-decoration: none;
+        color: #333;
+        background: #f8f9ff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        font-size: 18px;
+        font-weight: 500;
+        transition: all .25s ease;
+    }
+
+        /* ICON */
+        .role-btn i {
+            font-size: 42px;
+        }
+
+        /* CUSTOMER */
+        .role-btn.customer:hover {
+            background: #e8f0ff;
+            transform: translateY(-6px) scale(1.04);
+            box-shadow: 0 12px 30px rgba(78,84,200,.35);
+        }
+
+        /* SELLER */
+        .role-btn.seller:hover {
+            background: #e8fff2;
+            transform: translateY(-6px) scale(1.04);
+            box-shadow: 0 12px 30px rgba(0,180,120,.35);
         }
 
 </style>

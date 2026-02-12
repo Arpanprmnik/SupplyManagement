@@ -1,56 +1,38 @@
 ﻿@*@model IEnumerable<SupplyChain.Models.OrderViewModel>*@
 
-<div class="mb-3 d-flex justify-content-between">
-    <h2>Manager Dashboard</h2>
+<div class="dashboard-wrapper">
+    <div class="dashboard-card">
 
-    <a href="/Manager/Logout" class="btn btn-outline-danger">
-        Logout
-    </a>
-</div>
+        <div class="dashboard-header">
+            <h2>Manager Dashboard</h2>
 
-<a href="/Manager/Inventory" class="btn btn-primary mb-3">
-    Inventory
-</a>
-<table class="table table-bordered" id="productsTable">
-    <thead>
-        <tr>
-            <th>Order Id</th>
-            <th>Product</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
+            <div>
+                <a href="/Manager/Inventory" class="btn btn-primary me-2">
+                    Inventory
+                </a>
 
-    @*<tbody>
-            @foreach (var order in Model)
-            {
+                <a href="/Manager/Logout" class="btn btn-danger">
+                    Logout
+                </a>
+            </div>
+        </div>
+
+        <table class="table custom-table" id="productsTable">
+            <thead>
                 <tr>
-                    <td>@order.ID</td>
-                    <td>@order.ProductName</td>
-                    <td>@order.OrderDate.ToString("dd-MMM-yyyy")</td>
-                    <td>@order.Status</td>
-                    <td>
-                        @using (Html.BeginForm("UpdateStatus", "Manager", FormMethod.Post))
-                        {
-                            @Html.Hidden("orderId", order.ID)
-
-                            @Html.DropDownList(
-                                "status",
-                                new SelectList(new[] { "Approved", "Rejected" }),
-                                "-- Select --",
-                                new { @class = "form-control", style = "width:150px; display:inline;" }
-                            )
-
-                            <button type="submit" class="btn btn-sm btn-primary">
-                                Update
-                            </button>
-                        }
-                    </td>
+                    <th>Order Id</th>
+                    <th>Product</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
-            }
-        </tbody>*@
-</table>
+            </thead>
+
+            <tbody id="he"></tbody>
+        </table>
+
+    </div>
+</div>
 
 @section scripts {
     <script>
@@ -138,3 +120,110 @@
     });
     </script>
 }
+
+
+<style>
+    /* ===== PAGE BACKGROUND ===== */
+    body {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* ===== WRAPPER ===== */
+    .dashboard-wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px;
+    }
+
+    /* ===== MAIN CARD ===== */
+    .dashboard-card {
+        width: 95%;
+        max-width: 1100px;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ===== HEADER ===== */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+        .dashboard-header h2 {
+            font-weight: 600;
+            color: #333;
+        }
+
+    /* ===== TABLE ===== */
+    .custom-table {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+        .custom-table thead {
+            background: #f4f6f9;
+            font-weight: 600;
+        }
+
+        .custom-table tbody tr {
+            transition: 0.2s ease-in-out;
+        }
+
+            .custom-table tbody tr:hover {
+                background-color: #f1f5ff;
+            }
+
+    /* ===== STATUS BADGES ===== */
+    .text-success {
+        background-color: #e6f9f0;
+        padding: 4px 10px;
+        border-radius: 20px;
+    }
+
+    .text-danger {
+        background-color: #ffe6e6;
+        padding: 4px 10px;
+        border-radius: 20px;
+    }
+
+    .text-warning {
+        background-color: #fff4e6;
+        padding: 4px 10px;
+        border-radius: 20px;
+    }
+
+    /* ===== DROPDOWN ===== */
+    .status-dropdown {
+        border-radius: 20px;
+        padding: 4px 10px;
+        margin-right: 8px;
+    }
+
+    /* ===== UPDATE BUTTON ===== */
+    .update-btn {
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 13px;
+    }
+
+    /* ===== DATATABLE SEARCH BOX ===== */
+    .dataTables_filter input {
+        border-radius: 20px !important;
+        padding: 6px 15px !important;
+        border: 1px solid #ccc !important;
+    }
+
+    /* ===== PAGINATION ===== */
+    .dataTables_paginate .paginate_button {
+        border-radius: 50px !important;
+        margin: 2px !important;
+    }
+
+</style>

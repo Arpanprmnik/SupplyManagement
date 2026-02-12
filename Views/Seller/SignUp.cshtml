@@ -1,34 +1,72 @@
 ﻿@model SupplyChain.Models.Suppliers
 
-<h2>Seller Signup</h2>
+<div class="container vh-100 d-flex justify-content-center align-items-center">
 
-@using (Html.BeginForm())
-{
-    <div class="mb-3">
-        <label>Company Name</label>
-        @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control" })
+    <div class="card shadow-lg border-0 p-4 signup-card">
+
+        <div class="text-center mb-4">
+            <h3 class="fw-bold text-success">Create Seller Account</h3>
+            <small class="text-muted">Start selling your products</small>
+        </div>
+
+        @using (Html.BeginForm(null, null, FormMethod.Post))
+        {
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control", placeholder = "Company Name" })
+                <label>Company Name</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.ContactName, new { @class = "form-control", placeholder = "Contact Person" })
+                <label>Contact Person</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", placeholder = "Phone" })
+                <label>Phone Number</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email", placeholder = "Email" })
+                <label>Email Address</label>
+            </div>
+
+            <div class="form-floating mb-4">
+                @Html.PasswordFor(m => m.PasswordHash, new { @class = "form-control", placeholder = "Password" })
+                <label>Password</label>
+            </div>
+
+            <button class="btn btn-success w-100 py-2 fw-semibold">
+                Create Account
+            </button>
+
+            <div class="text-center mt-3">
+                <a href="/Seller/Login" class="text-decoration-none">
+                    Already have an account? Login
+                </a>
+            </div>
+        }
+
     </div>
 
-    <div class="mb-3">
-        <label>Contact Name</label>
-        @Html.TextBoxFor(m => m.ContactName, new { @class = "form-control" })
-    </div>
+</div>
 
-    <div class="mb-3">
-        <label>Phone</label>
-        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
-    </div>
+<style>
+    /* page gradient */
+    body {
+        background: linear-gradient(135deg,#11998e,#38ef7d);
+    }
 
-    <div class="mb-3">
-        <label>Email</label>
-        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
-    </div>
+    /* card width control */
+    .signup-card {
+        width: 380px;
+        border-radius: 15px;
+    }
 
-    <div class="mb-3">
-        <label>Password</label>
-        @Html.PasswordFor(m => m.PasswordHash, new { @class = "form-control" })
-    </div>
-
-    <button class="btn btn-success">Signup</button>
-}
+    /* better focus */
+    .form-control:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 .15rem rgba(25,135,84,.25);
+    }
+</style>
 

@@ -1,12 +1,32 @@
-﻿<h2>Manager Login</h2>
+﻿<div class="manager-wrapper">
 
-<form id="check">
-    <input name="email" placeholder="Email" required />
-    <br /><br />
-    <input name="password" type="password" placeholder="Password" required />
-    <br /><br />
-    <button type="submit">Login</button>
-</form>
+    <div class="manager-card">
+
+        <h2 class="manager-title">Manager Portal</h2>
+        <p class="manager-subtitle">Access order approvals & system controls</p>
+
+        <div id="errorBox" class="alert alert-danger text-center" style="display:none"></div>
+
+        <form id="check">
+
+            <div class="input-group">
+                <input name="email" type="email" required />
+                <label>Email Address</label>
+            </div>
+
+            <div class="input-group">
+                <input name="password" type="password" required />
+                <label>Password</label>
+            </div>
+
+            <button type="submit" class="manager-btn">Login</button>
+
+        </form>
+
+    </div>
+
+</div>
+
 
 @section scripts{
     <script>
@@ -38,3 +58,87 @@
     });
     </script>
 }
+
+<style>
+
+    /* BACKGROUND */
+    .manager-wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg,#141e30,#243b55);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* CARD */
+    .manager-card {
+        width: 370px;
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 18px;
+        box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+
+    /* TITLE */
+    .manager-title {
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .manager-subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    /* FLOAT INPUT */
+    .input-group {
+        position: relative;
+        margin-bottom: 24px;
+    }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+            background: transparent;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            color: #777;
+            background: #fff;
+            padding: 0 5px;
+            transition: .2s;
+        }
+
+        /* FLOAT EFFECT */
+        .input-group input:focus + label,
+        .input-group input:valid + label {
+            top: -8px;
+            font-size: 12px;
+            color: #243b55;
+        }
+
+    /* BUTTON */
+    .manager-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg,#243b55,#141e30);
+        color: white;
+        font-weight: 600;
+        transition: .25s;
+    }
+
+        .manager-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,.3);
+        }
+</style>

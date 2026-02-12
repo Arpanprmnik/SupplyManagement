@@ -1,57 +1,150 @@
 ﻿@model IEnumerable<SupplyChain.Models.Products>
 
-<div class="d-flex justify-content-end mb-3">
-    <a href="/Account/Common" class="btn btn-outline-primary">
-        Login
-    </a>
-</div>
-<h3>Welcome to SupplyChain</h3>
+<div class="main-wrapper">
+    <div class="container-card">
 
-<table id="productsTable" class="display">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Ajax.ActionLink(
-                        item.Name,
-                        "Details",
-                        "Products",
-                        new { id = item.Id },
-                        new AjaxOptions
-                        {
-                            HttpMethod = "GET",
-                            UpdateTargetId = "productDetails",
-                            InsertionMode = InsertionMode.Replace
-                        })
-                </td>
-                <td>@item.Price</td>
-            </tr>
+        <div class="top-bar">
+            <h2 class="page-title">SupplyChain Products</h2>
+
+            <a href="/Account/Common" class="btn btn-primary login-btn">
+                Login
+            </a>
+        </div>
+
+        <table id="productsTable" class="table table-hover custom-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-end">Price (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Ajax.ActionLink(
+                                item.Name,
+                                "Details",
+                                "Products",
+                                new { id = item.Id },
+                                new AjaxOptions
+                                {
+                                    HttpMethod = "GET",
+                                    UpdateTargetId = "productDetails",
+                                    InsertionMode = InsertionMode.Replace
+                                },
+                                new { @class = "product-link" }
+                            )
+                        </td>
+                        <td class="text-end fw-semibold">
+                            @item.Price
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div id="productDetails" class="details-box">
+            <h5>Click a product to view details</h5>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    /* PAGE BACKGROUND */
+    body {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* CENTER WRAPPER */
+    .main-wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* CARD CONTAINER */
+    .container-card {
+        width: 90%;
+        max-width: 900px;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    /* TOP BAR */
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .page-title {
+        font-weight: 600;
+        color: #333;
+    }
+
+    /* LOGIN BUTTON */
+    .login-btn {
+        border-radius: 25px;
+        padding: 6px 18px;
+    }
+
+    /* TABLE */
+    .custom-table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .custom-table thead {
+            background: #f8f9fa;
+            font-weight: 600;
         }
-    </tbody>
-</table>
 
+        .custom-table tbody tr:hover {
+            background-color: #f1f3f6;
+            transition: 0.3s ease;
+        }
 
-<div id="productDetails" style="margin-top:20px">
-    <h4>Click a product to view details</h4>
-</div>
+    /* PRODUCT LINK */
+    .product-link {
+        color: #4a00e0;
+        font-weight: 500;
+        text-decoration: none;
+    }
 
-@section scripts {
+        .product-link:hover {
+            text-decoration: underline;
+            color: #764ba2;
+        }
+
+    /* DETAILS BOX */
+    .details-box {
+        margin-top: 25px;
+        padding: 20px;
+        border-radius: 10px;
+        background: #f8f9fa;
+        border-left: 5px solid #667eea;
+    }
+    
+</style>
+@section Scripts{
     <script>
-        $(document).ready(function () {
-            $('#productsTable').DataTable({
-                paging: true,
-                searching: true,
-                ordering: true
-            });
+        $('#productsTable').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            pageLength: 5,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search products..."
+            }
         });
     </script>
-}
-
-
+    }

@@ -4,26 +4,37 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/datatables.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
 
 </head>
 <body>
-    
 
-    <div class="container body-content">
+    @if (ViewBag.FullWidth != null && ViewBag.FullWidth == true)
+    {
+        <!-- Login / Auth Pages -->
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now - My ASP.NET Application</p>
-        </footer>
-    </div>
+    }
+    else
+    {
+        <!-- Dashboard Pages -->
+        <div class="app-layout">
 
-    <script src="@Url.Content("~/Scripts/jquery-3.7.1.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/datatables.min.js")"></script>
+            @RenderBody()
+
+            <footer class="footer text-center">
+                <p>&copy; @DateTime.Now - My ASP.NET Application</p>
+            </footer>
+
+        </div>
+    }
+
+    <script src="~/Scripts/jquery-3.7.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/datatables.min.js"></script>
 
     @RenderSection("scripts", required: false)
 

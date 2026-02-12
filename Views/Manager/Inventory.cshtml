@@ -7,39 +7,39 @@
     </a>
 </div>
 
-    <table class="table table-bordered table-striped" id="productsTable">
-        <thead>
+<table class="table table-bordered table-striped" id="productsTable">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Warehouse</th>
+            <th>Available Quantity</th>
+        </tr>
+    </thead>
+    @*<tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>Product</th>
-                <th>Warehouse</th>
-                <th>Available Quantity</th>
-            </tr>
-        </thead>
-        @*<tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.ProductName</td>
-                    <td>@item.WarehouseName</td>
-                    <td>
-                        @if (item.Quantity <= 3)
-                        {
-                            <span class="badge bg-info fs-6  bg bg-warning">
-                                @item.Quantity
-                            </span>
-                            continue;
-                        }
-                        <span class="badge bg-info fs-6">
+                <td>@item.ProductName</td>
+                <td>@item.WarehouseName</td>
+                <td>
+                    @if (item.Quantity <= 3)
+                    {
+                        <span class="badge bg-info fs-6  bg bg-warning">
                             @item.Quantity
                         </span>
-                    </td>
-                </tr>
-             }*@
-        @*</tbody>*@
-    </table>
+                        continue;
+                    }
+                    <span class="badge bg-info fs-6">
+                        @item.Quantity
+                    </span>
+                </td>
+            </tr>
+         }*@
+    @*</tbody>*@
+</table>
 
-    @section scripts {
-        <script>
+@section scripts {
+    <script>
         $(document).ready(function () {
             var table = $('#productsTable').DataTable({
             ajax: {
@@ -71,5 +71,5 @@
             ordering: true
             })
         });
-        </script>
-    }
+    </script>
+}

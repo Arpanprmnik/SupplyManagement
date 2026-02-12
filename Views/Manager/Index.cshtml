@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SupplyChain.Models.OrderViewModel>
+﻿@*@model IEnumerable<SupplyChain.Models.OrderViewModel>*@
 
 <div class="mb-3 d-flex justify-content-between">
     <h2>Manager Dashboard</h2>
@@ -22,45 +22,119 @@
         </tr>
     </thead>
 
-    <tbody>
-        @foreach (var order in Model)
-        {
-            <tr>
-                <td>@order.ID</td>
-                <td>@order.ProductName</td>
-                <td>@order.OrderDate.ToString("dd-MMM-yyyy")</td>
-                <td>@order.Status</td>
-                <td>
-                    @using (Html.BeginForm("UpdateStatus", "Manager", FormMethod.Post))
-                    {
-                        @Html.Hidden("orderId", order.ID)
+    @*<tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.ID</td>
+                    <td>@order.ProductName</td>
+                    <td>@order.OrderDate.ToString("dd-MMM-yyyy")</td>
+                    <td>@order.Status</td>
+                    <td>
+                        @using (Html.BeginForm("UpdateStatus", "Manager", FormMethod.Post))
+                        {
+                            @Html.Hidden("orderId", order.ID)
 
-                        @Html.DropDownList(
-                            "status",
-                            new SelectList(new[] { "Approved", "Rejected" }),
-                            "-- Select --",
-                            new { @class = "form-control", style = "width:150px; display:inline;" }
-                        )
+                            @Html.DropDownList(
+                                "status",
+                                new SelectList(new[] { "Approved", "Rejected" }),
+                                "-- Select --",
+                                new { @class = "form-control", style = "width:150px; display:inline;" }
+                            )
 
-                        <button type="submit" class="btn btn-sm btn-primary">
-                            Update
-                        </button>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Update
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>*@
 </table>
-
 
 @section scripts {
     <script>
-        $(document).ready(function () {
-            $('#productsTable').DataTable({
-                paging: true,
-                searching: true,
-                ordering: true
-            });
+    $(document).ready(function () {
+
+        var table = $('#productsTable').DataTable({
+
+            ajax: {
+                url: '@Url.Action("GetOrders","Manager")',
+                type: 'GET',
+                dataSrc: 'data'
+            },
+
+            columns: [
+                { data: 'ID' },
+                { data: 'ProductName' },
+                {
+                    data: 'OrderDate',
+                    render: function (data) {
+                        const date = new Date(parseInt(data.substr(6)))
+                        return data ? date.toLocaleDateString('en-GB') : '';
+                    }
+                },
+                {
+                    data: 'Status',
+                    render: function (data) {
+                        if (data === "Approved")
+                            return '<span class="text-success fw-bold">Approved</span>';
+                        if (data === "Rejected")
+                            return '<span class="text-danger fw-bold">Rejected</span>';
+                        return '<span class="text-warning fw-bold">Pending</span>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+
+                        if (row.Status !== "Pending")
+                            return '';
+
+                        return `
+                            <select class="form-control status-dropdown"
+                                    data-id="${row.ID}"
+                                    style="width:120px; display:inline;">
+                                <option value="">--Select--</option>
+                                <option value="Approved">Approved</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
+
+                            <button class="btn btn-sm btn-primary update-btn"
+                                    data-id="${row.ID}">
+                                Update
+                            </button>
+                        `;
+                    }
+                }
+            ]
         });
+
+        $('#productsTable').on('click', '.update-btn', function () {
+
+            var orderId = $(this).data('id');
+            var status = $(this).closest('td')
+                                .find('.status-dropdown')
+                                .val();
+
+            if (!status) {
+                alert("Select status first");
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("UpdateStatus","Manager")',
+                type: 'POST',
+                data: { orderId: orderId, status: status },
+                success: function (res) {
+                    if (res.success) {
+                        alert("Updated Successfully");
+                        table.ajax.reload();
+                    }
+                }
+            });
+
+        });
+    });
     </script>
 }

@@ -1,6 +1,6 @@
 ﻿<h2>Manager Login</h2>
 
-<form method="post">
+<form id="check">
     <input name="email" placeholder="Email" required />
     <br /><br />
     <input name="password" type="password" placeholder="Password" required />
@@ -8,5 +8,33 @@
     <button type="submit">Login</button>
 </form>
 
-<p style="color:red">@ViewBag.Error</p>
+@section scripts{
+    <script>
+    $(document).ready(function () {
 
+        $('#check').submit(function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                url: '@Url.Action("Login", "Manager")',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (res) {
+
+                    if (res.success) {
+                        window.location.href = res.redirectUrl;
+                    } else {
+                        alert(res.message);
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+
+        });
+
+    });
+    </script>
+}

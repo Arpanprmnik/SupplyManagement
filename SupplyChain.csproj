@@ -221,6 +221,7 @@
     <Content Include="Views\Seller\SignUp.cshtml" />
     <Content Include="Views\Seller\Edit.cshtml" />
     <Content Include="Views\Seller\Inventory.cshtml" />
+    <Content Include="Views\Account\demo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

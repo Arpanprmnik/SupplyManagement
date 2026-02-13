@@ -36,7 +36,7 @@
 
 @section scripts {
     <script>
-    $(document).ready(function () {
+        @*$(document).ready(function () {
 
         var table = $('#productsTable').DataTable({
 
@@ -117,7 +117,144 @@
             });
 
         });
-    });
+    });*@
+        let table = null;
+
+        $(document).ready(function () {
+            loadstatus();
+        });
+
+
+        function loadstatus() {
+
+            if (table !== null) {
+                table.destroy();
+                $("#he").empty();
+            }
+
+            $.ajax({
+                url: '@Url.Action("GetOrders","Manager")',
+                type: 'GET',
+                success: function (res) {
+                    renderStatus(res.data || res);
+                    initializeDataTable();
+                },
+                error: function () {
+                    alert("Unable to load orders");
+                }
+            });
+        }
+
+
+        function StatusModel(obj) {
+            this.ID = obj.ID;
+            this.ProductName = obj.ProductName;
+            this.OrderDate = obj.OrderDate;
+            this.Status = obj.Status;
+        }
+
+        function getDate(data) {
+            if (!data) return '';
+            const date = new Date(parseInt(data.substr(6)));
+            return date.toLocaleDateString('en-GB');
+        }
+
+        function getStatus(data) {
+            if (data === "Approved")
+                return '<span class="text-success fw-bold">Approved</span>';
+            if (data === "Rejected")
+                return '<span class="text-danger fw-bold">Rejected</span>';
+            return '<span class="text-warning fw-bold">Pending</span>';
+        }
+
+        function getAct(row) {
+
+            if (row.Status !== "Pending")
+                return '';
+
+            return `
+                <select class="form-control status-dropdown"
+                        data-id="${row.ID}"
+                        style="width:120px; display:inline;">
+                    <option value="">--Select--</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+
+                <button class="btn btn-sm btn-primary update-btn"
+                        data-id="${row.ID}">
+                    Update
+                </button>
+            `;
+        }
+
+        function renderStatus(data) {
+
+            let container = $("#he");
+            container.empty();
+
+            if (!data || data.length === 0) {
+                container.append(`<tr><td colspan="5" class="text-center">No orders found</td></tr>`);
+                return;
+            }
+
+            data.forEach(function (item) {
+
+                let tem = new StatusModel(item);
+
+                let html = `
+                    <tr>
+                        <td>${tem.ID}</td>
+                        <td>${tem.ProductName}</td>
+                        <td>${getDate(tem.OrderDate)}</td>
+                        <td>${getStatus(tem.Status)}</td>
+                        <td>${getAct(tem)}</td>
+                    </tr>
+                `;
+
+                container.append(html);
+            });
+        }
+
+
+        $('#productsTable').on('click', '.update-btn', function () {
+
+            var orderId = $(this).data('id');
+
+            var status = $(this).closest('td')
+                .find('.status-dropdown')
+                .val();
+
+            if (!status) {
+                alert("Select status first");
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("UpdateStatus","Manager")',
+                type: 'POST',
+                data: { orderId: orderId, status: status },
+                success: function (res) {
+                    if (res.success) {
+                        alert("Updated Successfully");
+                        loadstatus(); 
+                    }
+                }
+            });
+        });
+
+        function initializeDataTable() {
+
+            table = $('#productsTable').DataTable({
+                pageLength: 5,
+                lengthMenu: [5, 10, 25, 50],
+                ordering: true,
+                searching: true,
+                info: true
+            });
+        }
+
+
     </script>
 }
 

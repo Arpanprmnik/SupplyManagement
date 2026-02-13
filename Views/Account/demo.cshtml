@@ -1,0 +1,188 @@
+﻿@{
+    ViewBag.Title = "My Appointments";
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger text-center mx-auto col-md-5">
+        @TempData["Error"]
+    </div>
+}
+<div class="text-center mb-5">
+    <h1 class="hero-title mt-5">
+        My Appointments
+    </h1>
+    <div class="mx-auto mt-2"
+         style="width:60px;height:4px;border-radius:2px;
+                background:linear-gradient(135deg,#6f42c1,#0d6efd);">
+    </div>
+    <p class="text-muted mt-2 small">
+        View and manage your salon bookings
+    </p>
+</div>
+
+@Html.ActionLink("← Back", "Index", "Account", null, new { @class = "btn btn-hover background-primary mb-4" })
+
+<div id="appointmentContainer" class="row "></div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            //console.log("HEllo");
+            loadAppointments();
+        });
+
+        function loadAppointments() {
+            $.ajax({
+                url: "/Appointment/MyAppointments",
+                type: "GET",
+                success: function (data) {
+                    //debugger
+                    //console.log("Hello");
+                    //console.log(data);
+                    renderAppointments(data);
+                },
+                error: function () {
+                    alert("Unable to load appointments");
+                }
+            });
+        }
+
+        function parseNetDate(value) {
+            return new Date(parseInt(value.substr(6)));
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString();
+        }
+        function formatTime(ts) {
+            return `${ts.Hours.toString().padStart(2, "0")}:${ts.Minutes.toString().padStart(2, "0")}`;
+        }
+
+
+        function AppointmentModel(obj) {
+            this.AppointmentId = obj.AppointmentId;
+            this.CustomerName = obj.CustomerName;
+            this.ServiceName = obj.ServiceName;
+            this.StylistName = obj.StylistName;
+            this.AppointmentDate = parseNetDate(obj.AppointmentDate);
+            this.StartTime = obj.StartTime;
+            this.EndTime = obj.EndTime;
+            this.Status = obj.Status;
+            this.StatusText = AppointmentStatusText[obj.Status];
+        }
+
+        const AppointmentStatusText = {
+            1: "Booked",
+            2: "Cancelled",
+            3: "Completed",
+            4: "NoShow"
+        };
+
+
+        function renderAppointments(data) {
+            let container = $("#appointmentContainer");
+            container.empty();
+
+            if (!data || data.length === 0) {
+                container.append("<p>No appointments found</p>");
+                return;
+            }
+
+            data.forEach(function (item) {
+                let appointment = new AppointmentModel(item);
+
+                let showCancelBtn = appointment.StatusText.toLowerCase() === "booked";
+
+                let cancelButtonHtml = showCancelBtn
+                    ? `
+<button class="cancel-badge badge rounded-pill px-3 py-2 bg-danger border-0 cursor-pointer" id="cancel-btn"
+                                    data-appointment='${JSON.stringify(appointment)}'>
+                                 Cancel Appointment
+</button>
+                          `
+                    : '';
+
+                let html = `
+<div class="col-md-4 mb-4">
+<div class="card h-100 border-0 shadow-sm rounded-2">
+<div class="card-header background-primary">
+<h5 class="card-title text-center text-white fw-semibold mb-2">
+                                                    ${appointment.ServiceName}
+</h5>
+</div>
+
+                                            <div class="card-body p-4 d-flex flex-column">
+<p class="mb-2 text-muted small">
+<i class="bi bi-person-badge me-2"></i>
+<strong>Stylist:</strong> ${appointment.StylistName}
+</p>
+
+                                                <p class="mb-2 text-muted small">
+<i class="bi bi-calendar-event me-2"></i>
+<strong>Date:</strong> ${formatDate(appointment.AppointmentDate)}
+</p>
+
+                                                <p class="mb-3 text-muted small">
+<i class="bi bi-clock me-2"></i>
+<strong>Time:</strong>
+                                                    ${formatTime(appointment.StartTime)} – ${formatTime(appointment.EndTime)}
+</p>
+
+                                                <div class="mt-auto d-flex justify-content-evenly text-center">
+<span class="badge rounded-pill px-3 py-2
+                                                        ${getStatusClass(appointment.StatusText)}">
+                                                        ${appointment.StatusText}
+</span>
+                                                    ${cancelButtonHtml}
+</div>
+
+
+                                            </div>
+</div>
+</div>
+
+                                `;
+                container.append(html);
+            });
+        }
+
+        function getStatusClass(status) {
+            switch (status.toLowerCase()) {
+                case "completed":
+                    return "bg-warning text-dark";
+                case "booked":
+                    return "bg-success ";
+                case "cancelled":
+                    return "bg-danger";
+                case "noshow":
+                    return "bg-secondary";
+                default:
+                    return "bg-info";
+            }
+        }
+
+        $(document).on("click", "#cancel-btn", function () {
+            if (!confirm("Are you sure you want to cancel appointment?")) return;
+
+            let appointment = $(this).data("appointment");
+
+            $.ajax({
+                url: "/Appointment/CancelAppointments",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(appointment),
+                success: function (res) {
+                    if (res.success) {
+                        alert("Appointment cancelled successfully");
+                        loadAppointments();
+                    } else {
+                        alert("Failed to cancel appointment");
+                    }
+                },
+                error: function () {
+                    alert("Error cancelling appointment");
+                }
+            });
+        });</script>
+}
